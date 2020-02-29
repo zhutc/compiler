@@ -38,6 +38,13 @@ const SimpleASTNode = require('./SimpleASTNode')
     2. 通过匹配最终最终找到合适的路径将token消耗完毕
 
  */
+
+/*
+* 消除左递归 ： 
+* 改写文法 ： add -> mul | add + mul    =>    add -> mul (+ mul)*
+* 使用EBNF表示文法之后，可以优化算法，使用循环来代替递归
+*/
+
 class SimpleCalculator {
 
     /**
@@ -108,6 +115,29 @@ class SimpleCalculator {
      * @param {SimpleTokenReader} tokenReader 
      */
     additive(tokenReader) {
+        /** 使用循环代替递归  */
+        let mulNode = this.multiplicative(tokenReader)
+        if (!mulNode) {
+            return null
+        }
+        while (true) {
+            let token = tokenReader.peek()
+            if (!token || token.getType() != TokenType.Plus) {  // 匹配 +
+                break
+            }
+            token = tokenReader.read()
+            let nextMulNode = this.multiplicative(tokenReader)
+            if (!nextMulNode) {
+                throw `additive 匹配 multiplicative 报错：+之后没有multiplicative表达式`
+            }
+            let node = new SimpleASTNode(ASTNodeType.Additive, token.getText())
+            node.addChild(mulNode)
+            node.addChild(nextMulNode)
+            mulNode = node
+        }
+        return mulNode
+        /** 
+         // 右递归的实现 
         let mulNode = this.multiplicative(tokenReader)
         if (!mulNode) {
             return null
@@ -125,6 +155,9 @@ class SimpleCalculator {
         node.addChild(mulNode)
         node.addChild(addNode)
         return node
+        */
+
+
     }
 
     /**

@@ -35,7 +35,7 @@ function testProgramm(script) {
 }
 try {
     // testMul('2 * ( 32 * 4 ) * 5')
-    testProgramm(' 2 + (3 + 4 ) * 5')
+    testProgramm(' 2 + 3 + 4  +  5')
 } catch (error) {
     console.log(error);
 }
