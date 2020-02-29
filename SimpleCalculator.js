@@ -112,6 +112,55 @@ class SimpleCalculator {
             this.dumpAST(n, `${indent}\t`)
         }
     }
+
+    /**
+     * 对表达是求值
+     * @param {SimpleASTNode} node 
+     * @param {String} indent 
+     */
+    evaluate(node, indent) {
+        let result = 0
+        switch (node.getType()) {
+            case ASTNodeType.Programm: { // 如果是计算根节点
+                result = this.evaluate(node.getChildren()[0], `${indent}\t`)
+            }
+                break;
+            case ASTNodeType.Additive: { // 加法节点
+                let lResult = this.evaluate(node.getChildren()[0], `${indent}\t`)
+                let rResult = this.evaluate(node.getChildren()[1], `${indent}\t`)
+                result = lResult + rResult
+            }
+                break;
+            case ASTNodeType.Multiplicative: { // 乘法节点
+                let lResult = this.evaluate(node.getChildren()[0], `${indent}\t`)
+                let rResult = this.evaluate(node.getChildren()[1], `${indent}\t`)
+                result = lResult * rResult
+
+            }
+                break;
+            case ASTNodeType.IntLiteral: { // 整形字面量
+                result = Number(node.getText())
+            }
+                break;
+            default:
+                break;
+        }
+        return result
+    }
+    /**
+     * 计算器
+     * @param {SimpleTokenReader} tokenReader 
+     */
+    programm(tokenReader) {
+        let rootNode = new SimpleASTNode(ASTNodeType.Programm, 'Calculator')
+        let add = this.additive(tokenReader)
+        rootNode.addChild(add)
+
+        this.dumpAST(rootNode)
+        let result = this.evaluate(rootNode)
+        return result
+    }
+
 }
 
 

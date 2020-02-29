@@ -26,5 +26,16 @@ function testAdd(script) {
     calculator.dumpAST(node)
 }
 
-// testMul('2 * ( 32 * 4 ) * 5')
-testAdd(' 2 + (3 + 4 )+ 5')
+function testProgramm(script) {
+    let lexer = new SimpleLexer()
+    let tokenReader = lexer.tokenize(script)
+    let calculator = new SimpleCalculator()
+    let reuslt = calculator.programm(tokenReader)
+    console.log(`testProgramm : ${reuslt}`)
+}
+try {
+    // testMul('2 * ( 32 * 4 ) * 5')
+    testProgramm(' 2 + (3 + 4 ) * 5')
+} catch (error) {
+    console.log(error);
+}
