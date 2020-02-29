@@ -11,6 +11,32 @@ const SimpleASTNode = require('./SimpleASTNode')
  * mul : pri | pri * mul
  * pri : IntLiteral | Identifier | ( add )
  * 注意：这个文法存在结合性问题，将add和mul变成了右结合性！
+ * 
+ * 文法的推导过程：原则上是产生式尽可能多的匹配token，表达式不满足则回溯匹配其他表达式
+    先给产生式标记代号，为了简化演示，将pri直接使用整形字面量代替
+     add : mul（A1） | mul + add （A2）
+     mul : IntLiteral （B1） | IntLiteral * mul （B2）
+     例如：2 + 3 * 5
+     add -> A1 先试用A1匹配
+         -> B1 (2) 从A1展开到B1,匹配到token(2),后续还有四个token，匹配该产生式失败
+         -> IntLiteral(2) 成功匹配到第一个token（2）
+         -> B2 继续mul的第二个产生式匹配剩余token，因为下一个token是 + ， mul的产生式全部匹配失败，退回到A2继续匹配
+         —> A2 
+         -> B1 + add  
+         -> IntLiteral (2) + add // 匹配token (2)
+         -> B2 + add 尝试匹配B2，因为后续是+，失败 ，回溯到A2继续
+         -> IntLiteral (2) + mul // 匹配token (+)
+         => IntLiteral (2) + B1  
+         -> IntLiteral (2) + IntLiteral(3) // 后续还有token，
+         -> IntLiteral (2) + B2 // 尝试 B2 
+         -> IntLiteral (2) + IntLiteral(3) * mul
+         -> IntLiteral (2) + IntLiteral(3) * B1
+         -> IntLiteral (2) + IntLiteral(3) * IntLiteral(5)
+
+    根据上述的推导可以得出：
+    1. 文法会尽可能多的去匹配token，即使已命中靠前的规则，如（匹配成功B1,还是继续尝试B2）
+    2. 通过匹配最终最终找到合适的路径将token消耗完毕
+
  */
 class SimpleCalculator {
 
