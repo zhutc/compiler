@@ -25,4 +25,7 @@ module.exports = class SimpleTokenReader {
             this.pos = position
         }
     }
+    getPosition(){
+        return this.pos
+    }
 }

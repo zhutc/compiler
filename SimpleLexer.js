@@ -41,6 +41,8 @@ class SimpleLexer {
                 case DfaState.LeftParen:
                 case DfaState.RightParen:
                 case DfaState.Plus:
+                case DfaState.Assignment:
+                case DfaState.SemiColon:
                     {
                         state = this.initToken(ch)
                     }
@@ -132,7 +134,17 @@ class SimpleLexer {
             newState = DfaState.Plus
             this.token.type = TokenType.Plus
             this.tokenText = ch
+        } else if (this.isAssign(ch)) {
+            newState = DfaState.Assignment
+            this.token.type = TokenType.Assignment
+            this.tokenText = ch
+        } else if (this.isSemiColon(ch)) {
+            newState = DfaState.SemiColon
+            this.token.type = TokenType.SemiColon
+            this.tokenText = ch
         }
+
+
 
 
         return newState
@@ -163,6 +175,13 @@ class SimpleLexer {
 
     isPlus(ch) {
         return ch == '+'
+    }
+    isAssign(ch) {
+        return ch == '='
+    }
+
+    isSemiColon(ch) {
+        return ch == ';'
     }
 }
 
