@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/SimpleScript.js",
+            "program": "${workspaceFolder}/1-5/SimpleScript.js",
             "console":"integratedTerminal",
         }
     ]
