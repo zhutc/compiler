@@ -73,6 +73,10 @@ class SimpleScript {
             default:
                 break;
         }
+
+        if(node.getType() == ASTNodeType.IntDeclaration || node.getType() == ASTNodeType.AssignmentStmt){
+            console.log(`${node.getText()} : ${this.variables[node.getText()]}`)
+        }
         return result
     }
 }

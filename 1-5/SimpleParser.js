@@ -226,6 +226,7 @@ class SimpleParser {
             if(child){
                 rootNode.addChild(child)
             }
+            break;
         }
         return rootNode
     }
