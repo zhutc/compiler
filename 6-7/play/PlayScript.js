@@ -8,7 +8,7 @@ const ASTEvaluator = require('./ASTEvaluator')
 
 class PlayScript {
     main() {
-        let script = ' 1 + 2 + 3 ;'
+        let script = ' 1 + 2 * 3 ;'
         let chars = new Antlr.InputStream(script);
         let lexer = new PlayScriptLexer(chars);
         let tokens = new Antlr.CommonTokenStream(lexer);
